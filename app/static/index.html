@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veridian Corp — Internal Service Agent (IT Support)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="brand-section">
+                <div class="logo-badge" title="Veridian Corp IT Support">V</div>
+                <div class="brand-text">
+                    <h1>Veridian Corp — IT Service Agent</h1>
+                    <div class="subtitle">
+                        <span>AIONOS Assignment 2: Internal Support Agent</span>
+                        <span>•</span>
+                        <span class="badge-tag">Mon 21 Sep – Fri 25 Sep 2026</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle Light / Dark Mode" aria-label="Toggle color theme">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                <button class="btn btn-secondary" id="run-batch-btn" title="Run all 15 test requests sequentially">
+                    <span>▶</span> Run All REQ-01..15
+                </button>
+                <button class="btn btn-outline" id="reset-btn" title="Reset tickets to initial TK-1042..1051 seed state">
+                    <span>↺</span> Reset Seed
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs-wrapper" aria-label="Main Navigation">
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="console-tab">
+                <span>⚡</span> Process a Request
+            </button>
+            <button class="tab-btn" data-tab="queue-tab">
+                <span>📋</span> Ticket Queue & Precedents
+            </button>
+            <button class="tab-btn" data-tab="kb-tab">
+                <span>📚</span> Knowledge Base & Policies
+            </button>
+            <button class="tab-btn" data-tab="arch-tab">
+                <span>🏗️</span> Architecture & Rubric
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-container">
+
+        <!-- TAB 1: Live Agent Console -->
+        <section id="console-tab" class="tab-content active">
+            <div class="console-grid">
+
+                <!-- Left Column: Pre-Loaded Requests -->
+                <aside class="sidebar-panel">
+                    <div class="panel-header">
+                        <span class="panel-title">
+                            <span>📦</span> Data Pack Requests (15)
+                        </span>
+                        <span class="badge-tag" id="req-count-badge">REQ-01..15</span>
+                    </div>
+                    <div class="req-cards-list" id="req-cards-container">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+                </aside>
+
+                <!-- Right Column: Interactive Workspace & Reasoning -->
+                <div class="agent-workspace">
+
+                    <!-- Request Input Box -->
+                    <div class="input-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="form-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span>💬</span> Employee Support Request
+                                <span class="badge-tag" id="current-req-id-badge">REQ-01</span>
+                            </span>
+                            <span style="font-size: 0.725rem; color: var(--color-text-muted);">Freeform input or select preset</span>
+                        </div>
+
+                        <div class="input-meta-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="input-employee">Employee Name</label>
+                                <input type="text" id="input-employee" class="form-input" value="Aditi Sharma">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="input-email">Email Address</label>
+                                <input type="email" id="input-email" class="form-input" value="aditi.sharma@veridiancorp.example">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="input-text">Message / Problem Statement</label>
+                            <textarea id="input-text" class="form-textarea" rows="2">Laptop completely dead, ~3.5 yrs old</textarea>
+                        </div>
+
+                        <div class="input-actions">
+                            <span style="font-size: 0.725rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 0.35rem;">
+                                <span>🔒</span> Deterministic Policy Engine Active (Anti-Hallucination)
+                            </span>
+                            <button class="btn btn-primary" id="run-btn">
+                                <span>⚡</span> Evaluate & Resolve
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Output & Reasoning Visualizer -->
+                    <div class="output-card" id="output-stage">
+
+                        <!-- Pipeline Progress Steps -->
+                        <div class="pipeline-steps" id="pipeline-steps-container">
+                            <div class="step-box animate-in">
+                                <div class="step-num">STAGE 1</div>
+                                <div class="step-title">Intake & Classification</div>
+                                <div class="step-desc" id="step1-desc">Laptop Replacement (96%)</div>
+                            </div>
+                            <div class="step-box animate-in">
+                                <div class="step-num">STAGE 2</div>
+                                <div class="step-title">Policy & Precedent Match</div>
+                                <div class="step-desc" id="step2-desc">KB-03, ASSET-POLICY</div>
+                            </div>
+                            <div class="step-box animate-in">
+                                <div class="step-num">STAGE 3</div>
+                                <div class="step-title">Rules & Conflict Check</div>
+                                <div class="step-desc" id="step3-desc">PENDING_APPROVAL</div>
+                            </div>
+                            <div class="step-box animate-in">
+                                <div class="step-num">STAGE 4</div>
+                                <div class="step-title">Ticket & Citations</div>
+                                <div class="step-desc" id="step4-desc">TK-1052 Generated</div>
+                            </div>
+                        </div>
+
+                        <!-- Policy Conflict Alert Box (KB-03 vs Asset Management Policy) -->
+                        <div class="conflict-alert" id="conflict-alert-box" style="display: none;">
+                            <div class="alert-icon">⚠️</div>
+                            <div class="alert-content">
+                                <h4>Surfaced Policy Conflict: 3-Year (KB-03) vs 4-Year (Asset Management Policy)</h4>
+                                <p id="conflict-summary-text">
+                                    Device age is ~3.5 years. KB-03 allows replacement after 3 years, but Asset Management Policy (Q2 2026) dictates a 4-year cycle.
+                                    Following precedent TK-1043, this requires IT Department Approval AND a Finance Sign-off flag.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Security Violation Alert Box (KB-09 Forwarding) -->
+                        <div class="security-alert" id="security-alert-box" style="display: none;">
+                            <div class="alert-icon">🚨</div>
+                            <div class="alert-content">
+                                <h4>Security Incident Policy Violation Flagged</h4>
+                                <p id="security-details-text">
+                                    Forwarding suspected phishing emails to colleagues is strictly prohibited under KB-09. Escalated to IT Security immediately.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Decision & Ticket Metadata Grid -->
+                        <div class="decision-card">
+                            <div class="decision-meta">
+                                <div class="meta-row">
+                                    <span class="meta-label">Generated Ticket:</span>
+                                    <span class="meta-val code" id="ticket-id-val">TK-1052</span>
+                                </div>
+                                <div class="meta-row">
+                                    <span class="meta-label">Category:</span>
+                                    <span class="meta-val" id="category-val">Laptop Replacement</span>
+                                </div>
+                                <div class="meta-row">
+                                    <span class="meta-label">Approver(s):</span>
+                                    <span class="meta-val" id="approver-val" style="color: var(--color-warning); font-weight: 600;">IT Approval + Finance Sign-off Flag</span>
+                                </div>
+                                <div class="meta-row">
+                                    <span class="meta-label">Fulfillment SLA:</span>
+                                    <span class="meta-val" id="sla-val" style="color: var(--color-text-muted);">Request &gt;=2 weeks in advance; Procurement unstated</span>
+                                </div>
+                            </div>
+                            <div class="decision-badge-container">
+                                <span style="font-size: 0.68rem; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Decision State</span>
+                                <span class="decision-badge PENDING_APPROVAL" id="decision-badge-val">
+                                    <span class="badge-icon">⏳</span> <span class="badge-text">PENDING APPROVAL</span>
+                                </span>
+                                <span style="font-size: 0.725rem; color: var(--color-text-secondary);" id="ticket-status-val">Pending Approval (active)</span>
+                            </div>
+                        </div>
+
+                        <!-- Follow-up Clarification Drawer (for REQ-13, REQ-15, REQ-12) -->
+                        <div class="followup-box" id="followup-drawer" style="display: none;">
+                            <div class="followup-header">
+                                <span>❓</span> Follow-Up Clarification Required by Agent
+                            </div>
+                            
+                            <!-- Typing Indicator before revealing question -->
+                            <div class="typing-indicator" id="typing-indicator-box" style="display: none;">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+
+                            <p style="font-size: 0.825rem; color: var(--color-text); line-height: 1.45;" id="followup-q-text">
+                                Follow-up question text here.
+                            </p>
+                            <div class="followup-input-row" id="followup-input-container">
+                                <input type="text" id="followup-input" class="form-input" style="flex: 1;" placeholder="Provide clarifying details or simulated employee answer...">
+                                <button class="btn btn-primary" id="followup-submit-btn">
+                                    Submit Answer & Continue
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Employee Response & Citations -->
+                        <div class="response-container">
+                            <div class="response-header">
+                                <span class="response-title">
+                                    <span>🤖</span> Agent Response to Employee
+                                </span>
+                                <span style="font-size: 0.725rem; color: var(--color-primary); font-weight: 600;">Ground-Truth Grounded</span>
+                            </div>
+                            <div class="response-body" id="response-text-content">
+                                Response will appear here...
+                            </div>
+                            <div class="citations-box">
+                                <span style="font-size: 0.725rem; color: var(--color-text-muted); font-weight: 700;">SOURCES CITED:</span>
+                                <div id="citations-list" style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
+                                    <!-- Interactive citation chips dynamically injected -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Immutable Audit Trail Accordion -->
+                        <div class="audit-accordion">
+                            <button class="audit-header-btn" type="button" id="toggle-audit-btn">
+                                <span>🔍 Immutable Audit Trail Log (Step-by-Step Rationale)</span>
+                                <span style="font-size: 0.725rem; color: var(--color-primary); font-weight: 700;">Append-Only</span>
+                            </button>
+                            <div style="overflow-x: auto;" id="audit-table-wrapper">
+                                <table class="audit-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Step</th>
+                                            <th>Phase</th>
+                                            <th>Input Telemetry</th>
+                                            <th>Output State</th>
+                                            <th>Deterministic Rationale</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="audit-table-body">
+                                        <!-- Audit steps -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 2: Ticket Queue & Precedents -->
+        <section id="queue-tab" class="tab-content">
+            <div class="queue-header-bar">
+                <div style="display: flex; align-items: center; gap: 0.85rem;">
+                    <h2 style="font-size: 1.15rem; font-weight: 700;">Service Desk Ticket Queue</h2>
+                    <span class="badge-tag" id="queue-count-badge">10 Tickets</span>
+                </div>
+                <div class="filter-group">
+                    <input type="text" id="search-input" class="form-input" style="width: 220px;" placeholder="Search tickets...">
+                    <select id="status-filter" class="form-select">
+                        <option value="all">All Statuses</option>
+                        <option value="active">Active Only</option>
+                        <option value="closed">Closed Only</option>
+                    </select>
+                    <select id="category-filter" class="form-select">
+                        <option value="All">All Categories</option>
+                        <option value="Laptop Replacement">Laptop Replacement</option>
+                        <option value="VPN Access">VPN Access</option>
+                        <option value="Password Reset">Password Reset</option>
+                        <option value="Software Installation">Software Installation</option>
+                        <option value="Printer Troubleshooting">Printer Troubleshooting</option>
+                        <option value="Email Mailbox Quota">Email Mailbox Quota</option>
+                        <option value="Guest Wi-Fi">Guest Wi-Fi</option>
+                        <option value="Expense Software Access">Expense Software Access</option>
+                        <option value="Security Incident Reporting">Security Incident Reporting</option>
+                        <option value="WFH Equipment">WFH Equipment</option>
+                        <option value="Admin / Server Access">Admin / Server Access</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="queue-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket ID</th>
+                            <th>Employee</th>
+                            <th>Original Request / Issue</th>
+                            <th>Category</th>
+                            <th>Decision</th>
+                            <th>Current Status</th>
+                            <th>Cited Sources</th>
+                        </tr>
+                    </thead>
+                    <tbody id="queue-table-body">
+                        <!-- Loaded via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- TAB 3: Knowledge Base & Policies -->
+        <section id="kb-tab" class="tab-content">
+            <div style="margin-bottom: 1.15rem; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h2 style="font-size: 1.15rem; font-weight: 700;">Veridian Corp — IT Policies & Knowledge Base</h2>
+                    <p style="font-size: 0.78rem; color: var(--color-text-secondary); margin-top: 0.2rem;">
+                        Authoritative policy articles (KB-01 to KB-10) and Asset Management Policy (Q2 2026).
+                    </p>
+                </div>
+                <span class="badge-tag">11 Authoritative Documents</span>
+            </div>
+
+            <div class="kb-grid" id="kb-grid-container">
+                <!-- KB cards loaded via JS -->
+            </div>
+        </section>
+
+        <!-- TAB 4: Architecture & Rubric -->
+        <section id="arch-tab" class="tab-content">
+            <div class="arch-grid">
+                
+                <!-- Architecture Diagram -->
+                <div class="arch-card">
+                    <h3><span>🏗️</span> Solution Architecture Pipeline</h3>
+                    <div class="code-block">
++-----------------------------------------------------------------------+
+| Employee / Reviewer Input (Freeform Text or REQ-01..15 Seed Scenarios)|
++-----------------------------------------------------------------------+
+                                  │
+                                  ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│ 1. INTAKE & CLASSIFICATION ENGINE (app/engine/classifier.py)          │
+│    - Regex & Lexical Entity Extraction (Age, Attempts, Contractor)   │
+│    - Clarity & Insufficiency Detection (Flags Vague / Missing Info)   │
+│    - Intent Categorization into 10 KB Categories                      │
+└───────────────────────────────────────────────────────────────────────┘
+                                  │
+                                  ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│ 2. DETERMINISTIC POLICY & PRECEDENT MATCHER (policy_matcher.py)      │
+│    - KB-01..10 Lookup Table                                           │
+│    - Asset Management Policy (Q2 2026) Integration                    │
+│    - Precedent Ticket Retrieval (TK-1042..TK-1051)                    │
+│    - Policy Tension Surfacing (KB-03 3-yr vs Asset Policy 4-yr)      │
+└───────────────────────────────────────────────────────────────────────┘
+                                  │
+                                  ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│ 3. RULE & DECISION ENGINE (app/engine/decision_engine.py)             │
+│    - Pure Deterministic State Machine                                 │
+│    - [AUTO_RESOLVED | RESOLVED_WITH_INSTRUCTIONS | PENDING_APPROVAL   │
+│       | ESCALATED_SECURITY | NEEDS_CLARIFICATION]                    │
+│    - Dual Approver Flagging (IT + Finance for 3-4 yr laptops)        │
+│    - Security Violation Flagging (KB-09 Phishing Forwarding)          │
+│    - Unstated SLA Explicit Disclosure (Never Fabricates SLAs)         │
+└───────────────────────────────────────────────────────────────────────┘
+                                  │
+                                  ▼
+┌───────────────────────────────────────────────────────────────────────┐
+│ 4. CITATION, TICKETING & AUDIT SERVICE (response_builder.py & store) │
+│    - Auto-generates Ticket starting at TK-1052                       │
+│    - Formats Response with Mandatory [Sources Cited: KB-XX, TK-XX]    │
+│    - Appends Immutable Step-by-Step Audit Record to Ticket            │
+└───────────────────────────────────────────────────────────────────────┘
+                    </div>
+                </div>
+
+                <!-- Grading Rubric Matrix -->
+                <div class="arch-card">
+                    <h3><span>✅</span> Grading Rubric Compliance Matrix</h3>
+                    <table class="audit-table">
+                        <thead>
+                            <tr>
+                                <th>Rubric Criterion</th>
+                                <th>Engine Implementation & Evidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--color-primary);">Understand Employee Issue</td>
+                                <td>Entity extractor parses device age, failed attempts, contractor status, forwarding actions, and system names.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--color-primary);">Find Relevant Policy</td>
+                                <td>Deterministic policy matrix links categories to KB-01..10, Asset Policy, and historical precedents.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--color-primary);">Ask Follow-Up Questions</td>
+                                <td>Prompts for clarifying details on vague requests (REQ-15), diagnostic checks (REQ-13), and account status (REQ-12).</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--color-primary);">Resolve Simple Requests</td>
+                                <td>Direct auto-resolution for Guest Wi-Fi (REQ-02) and self-service instructions for password reset (REQ-03) & VPN (REQ-05).</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--color-primary);">Escalate Risky / Unclear</td>
+                                <td>Escalates phishing security violations (REQ-08), routes non-catalog software to IT Security (REQ-04, 14), and parks WFH/Admin requests in approval queues.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--color-primary);">Surface Policy Tension</td>
+                                <td>Detects 3.5 yr laptop age in REQ-01, exposes KB-03 (3-yr) vs Asset Policy (4-yr) conflict, requires dual IT+Finance sign-off, cites TK-1043.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--color-primary);">Show Sources (Citations)</td>
+                                <td>Every response concludes with explicit <code>[Sources Cited: KB-ID, Asset Policy, Precedent: TK-ID]</code>.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--color-primary);">Maintain Audit Trail</td>
+                                <td>Append-only logs of classification, policy match, rule evaluation, and response generation saved per ticket.</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: var(--color-primary);">No Hallucinated Data</td>
+                                <td>Explicitly states when SLAs or approvers are unstated in policy rather than inventing turnaround times.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for Ticket Detail & Audit Log -->
+    <div class="modal-backdrop" id="ticket-modal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modal-ticket-id" style="font-size: 1.05rem; font-weight: 700;">TK-1052</h3>
+                    <p id="modal-request-text" style="font-size: 0.78rem; color: var(--color-text-secondary); margin-top: 0.2rem;"></p>
+                </div>
+                <button class="btn btn-outline" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="decision-meta" style="background: var(--color-surface-sunken); padding: 0.9rem; border-radius: var(--radius-md);">
+                    <div class="meta-row">
+                        <span class="meta-label">Category:</span>
+                        <span class="meta-val" id="modal-category"></span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Decision:</span>
+                        <span class="meta-val"><span id="modal-decision" class="decision-badge"></span></span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Status:</span>
+                        <span class="meta-val" id="modal-status"></span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Approvers:</span>
+                        <span class="meta-val" id="modal-approver"></span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">SLA:</span>
+                        <span class="meta-val" id="modal-sla"></span>
+                    </div>
+                    <div class="meta-row">
+                        <span class="meta-label">Cited Sources:</span>
+                        <span class="meta-val code" id="modal-sources"></span>
+                    </div>
+                    <div class="meta-row" style="margin-top: 0.4rem;">
+                        <span class="meta-label">Reasoning:</span>
+                        <span class="meta-val" id="modal-reasoning" style="font-size: 0.78rem; line-height: 1.45;"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="font-size: 0.825rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.45rem;">
+                        Immutable Audit Log Steps
+                    </h4>
+                    <table class="audit-table">
+                        <thead>
+                            <tr>
+                                <th>Step</th>
+                                <th>Phase</th>
+                                <th>Input</th>
+                                <th>Output</th>
+                                <th>Rationale</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-audit-tbody">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Interactive Citation Popover -->
+    <div class="citation-popover" id="citation-popover">
+        <div class="popover-header">
+            <span class="popover-title" id="popover-id">KB-03</span>
+            <span class="badge-tag" id="popover-category">Policy</span>
+        </div>
+        <div class="popover-body" id="popover-text">
+            Policy text summary...
+        </div>
+        <div class="popover-meta" id="popover-meta">
+            <div><strong>Approvals:</strong> <span id="popover-approvals">None</span></div>
+            <div><strong>SLA:</strong> <span id="popover-sla">Not stated in policy</span></div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
